@@ -1,6 +1,6 @@
 //
 //  CardIOPaymentViewController.h
-//  Version 3.6.4
+//  Version 3.10.1
 //
 //  Copyright (c) 2011-2014 PayPal. All rights reserved.
 //
@@ -26,10 +26,6 @@
 /// @return Properly initialized CardIOPaymentViewController.
 - (id)initWithPaymentDelegate:(id<CardIOPaymentViewControllerDelegate>)aDelegate scanningEnabled:(BOOL)scanningEnabled;
 
-/// The application token you obtained from the card.io website.
-/// If not set before presenting the view controller, an exception will be thrown.
-@property(nonatomic, copy, readwrite) NSString *appToken;
-
 /// The preferred language for all strings appearing in the user interface.
 /// If not set, or if set to nil, defaults to the device's current language setting.
 ///
@@ -42,7 +38,7 @@
 /// E.g., specifying "en" on a device set to "English" and "United Kingdom" will result in "en_GB".
 ///
 /// These localizations are currently included:
-/// ar,da,de,en,en_AU,en_GB,en_SV,es,es_MX,fr,he,it,ja,ko,ms,nb,nl,pl,pt,pt_BR,ru,sv,tr,zh-Hans,zh-Hant_HK,zh-Hant_TW.
+/// ar,da,de,en,en_AU,en_GB,en_SE,es,es_MX,fr,he,is,it,ja,ko,ms,nb,nl,pl,pt,pt_BR,ru,sv,th,tr,zh-Hans,zh-Hant,zh-Hant_TW.
 @property(nonatomic, copy, readwrite) NSString *languageOrLocale;
 
 /// If YES, the status bar's style will be kept as whatever your app has set it to.
@@ -81,6 +77,9 @@
 /// Defaults to NO.
 @property(nonatomic, assign, readwrite) BOOL suppressScannedCardImage;
 
+/// Mask the card number digits as they are manually entered by the user. Defaults to NO.
+@property(nonatomic, assign, readwrite) BOOL maskManualEntryDigits;
+
 /// Set to NO if you don't need to collect the card expiration. Defaults to YES.
 @property(nonatomic, assign, readwrite) BOOL collectExpiry;
 
@@ -114,6 +113,15 @@
 /// Access to the delegate.
 @property(nonatomic, weak, readwrite) id<CardIOPaymentViewControllerDelegate> paymentDelegate;
 
+/// The preload method prepares card.io to launch faster. Calling preload is optional but suggested.
+/// On an iPhone 5S, for example, preloading makes card.io launch ~400ms faster.
+/// The best time to call preload is when displaying a view from which card.io might be launched;
+/// e.g., inside your view controller's viewWillAppear: method.
+/// preload works in the background; the call to preload returns immediately.
+/// The preload method of CardIOPaymentViewController and of CardIOView do the same work,
+/// so a call to either of them suffices.
++ (void)preload;
+
 /// Determine whether this device supports camera-based card scanning, considering
 /// factors such as hardware support and OS version.
 ///
@@ -127,6 +135,13 @@
 /// @return Human-readable version of this library.
 + (NSString *)libraryVersion;
 
-/// Previous versions of card.io provided an informative message when the user first launched card.io.
+
+#pragma mark - Deprecated properties
+
+/// Previous versions of card.io (prior to 3.2.3) provided an informative message when the user first launched card.io.
 @property(nonatomic, assign, readwrite) BOOL showsFirstUseAlert __attribute__((deprecated("The former first-time alert is no more.")));
+
+/// Previous versions of card.io (prior to 3.10.0) required you to obtain an "application token" from the card.io website.
+@property(nonatomic, copy, readwrite) NSString *appToken __attribute__((deprecated("The former appToken is no longer required.")));
+
 @end
