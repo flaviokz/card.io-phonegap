@@ -52,7 +52,8 @@
         
     </platform>
     <platform name="ios">
-        <framework src="libc++.dylib" />        
+        <framework src="libc++.dylib" />
+        <framework src="AudioToolbox.framework" weak="true" />
         
         <config-file target="config.xml" parent="/*">
             <feature name="CardIOPlugin">
