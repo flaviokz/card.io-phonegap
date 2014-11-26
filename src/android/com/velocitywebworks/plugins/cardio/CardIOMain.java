@@ -55,36 +55,39 @@ public class CardIOMain extends Activity {
 		if (data != null && data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
 				
 	            CreditCard scanResult = data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
-	            
-	            // Never log a raw card number. Avoid displaying it, but if necessary use redacted number	            
-	            JSONArray carddata = new JSONArray();
-	            JSONObject j = new JSONObject();
-	            
-	            try {
-	            	j.put("card_number",scanResult.cardNumber);
-	            	j.put("redacted_card_number", scanResult.getFormattedCardNumber());
-		            if (scanResult.isExpiryValid()) {
-		            	j.put("expiry_month",scanResult.expiryMonth);
-						j.put("expiry_year",scanResult.expiryYear);
-		            }
 
-		            if (scanResult.cvv != null) {
-		            	j.put("cvv",scanResult.cvv);
-		                
-		            }
+	            if(scanResult != null) {
+	            	// Never log a raw card number. Avoid displaying it, but if necessary use redacted number	            
+	            	JSONArray carddata = new JSONArray();
+	            	JSONObject j = new JSONObject();
 
-		            if (scanResult.zip != null) {
-		            	j.put("zip",scanResult.zip);
-		            }
-					
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	            
-	            carddata.put(j);
-	            CardIOPlugin.mCreditcardNumber = carddata;
+	            	try {
+	            		j.put("card_number",scanResult.cardNumber);
+	            		j.put("redacted_card_number", scanResult.getFormattedCardNumber());
+	            		if (scanResult.isExpiryValid()) {
+	            			j.put("expiry_month",scanResult.expiryMonth);
+	            			j.put("expiry_year",scanResult.expiryYear);
+	            		}
+
+	            		if (scanResult.cvv != null) {
+	            			j.put("cvv",scanResult.cvv);
+
+	            		}
+
+	            		if (scanResult.zip != null) {
+	            			j.put("zip",scanResult.zip);
+	            		}
+
+	            	} catch (JSONException e) {
+						// TODO Auto-generated catch block
+	            		e.printStackTrace();
+	            	}
+
+	            	carddata.put(j);
+	            	CardIOPlugin.mCreditcardNumber = carddata;
+	            }
 	        }
+
 	    }
 	    CardIOMain.this.finish();
 	}
